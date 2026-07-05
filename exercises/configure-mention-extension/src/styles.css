@@ -1,0 +1,175 @@
+:root {
+  color: #1e2528;
+  background: #f5f2ed;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  min-height: 100vh;
+}
+
+.workspace {
+  padding: 40px;
+}
+
+.workspace header {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  color: #5b6c71;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+h1 {
+  max-width: 720px;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1;
+}
+
+.editor-frame {
+  background: #ffffff;
+  border: 1px solid #d6d2ca;
+  border-radius: 8px;
+  box-shadow: 0 18px 48px rgb(37 42 45 / 12%);
+  min-height: 360px;
+  padding: 28px;
+}
+
+.ProseMirror {
+  min-height: 300px;
+  outline: none;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.note-mention {
+  background: #e3f3ee;
+  border: 1px solid #8dbdad;
+  border-radius: 999px;
+  color: #17483d;
+  display: inline-block;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 2px 8px;
+}
+
+.notes-panel {
+  background: #253034;
+  color: #f8f6f1;
+  overflow: auto;
+  padding: 32px 24px;
+}
+
+.notes-panel h2 {
+  font-size: 1.1rem;
+  margin-bottom: 18px;
+}
+
+.note-card {
+  border-top: 1px solid rgb(248 246 241 / 20%);
+  padding: 16px 0;
+}
+
+.note-card div {
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.note-card span {
+  color: #b8c1c4;
+  font-size: 0.82rem;
+}
+
+.note-card p {
+  color: #e7e2d9;
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+
+.suggestion-popover {
+  background: #ffffff;
+  border: 1px solid #d6d2ca;
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgb(37 42 45 / 20%);
+  left: 0;
+  max-width: 360px;
+  padding: 6px;
+  position: fixed;
+  top: 0;
+  z-index: 20;
+}
+
+.suggestion-list {
+  display: grid;
+  gap: 4px;
+}
+
+.suggestion-item {
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: #1e2528;
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+  padding: 10px;
+  text-align: left;
+}
+
+.suggestion-item:hover {
+  background: #f0eee9;
+}
+
+.suggestion-item.is-selected {
+  background: #e3f3ee;
+}
+
+.suggestion-item span,
+.suggestion-empty {
+  color: #5b6c71;
+  font-size: 0.9rem;
+}
+
+.suggestion-empty {
+  padding: 10px;
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace {
+    padding: 24px;
+  }
+
+  .notes-panel {
+    max-height: none;
+  }
+}
