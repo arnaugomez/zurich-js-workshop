@@ -4,6 +4,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import * as exercise from '../src/exercise/aiRewrite'
 import * as solution from '../src/solution/aiRewrite.solution'
 
+vi.mock('../src/aiApi', () => ({
+  requestAiRewrite: vi.fn(async (_task: string, text: string) =>
+    `AI rewrite: ${text.trim().replace(/\s+/g, ' ')}`,
+  ),
+}))
+
 type Implementation = typeof solution
 
 let editor: Editor | undefined
@@ -23,13 +29,6 @@ function createEditor(content = '<p>The first draft needs kinder wording.</p>') 
   return editor
 }
 
-function createMappableRange(editor: Editor, from: number, to: number) {
-  return {
-    from: editor.utils.createMappablePosition(from),
-    to: editor.utils.createMappablePosition(to),
-  }
-}
-
 describe.each([
   ['exercise', exercise],
   ['solution', solution],
@@ -37,20 +36,18 @@ describe.each([
   '%s AI rewrite helpers',
   (_name, implementation) => {
     it('extracts text from the requested range and creates mappable positions', async () => {
-      vi.useFakeTimers()
       const editor = createEditor()
       const from = 5
       const to = 16
 
       const request = implementation.requestAiRewrite(
+        'rephrase',
         editor,
-        createMappableRange(editor, from, to),
+        { from, to },
       )
 
       expect(request.range.from.position).toBe(from)
       expect(request.range.to.position).toBe(to)
-
-      await vi.advanceTimersByTimeAsync(700)
 
       await expect(request.text).resolves.toBe('AI rewrite: first draft')
     })
@@ -58,8 +55,9 @@ describe.each([
     it('maps both stored positions through a transaction', () => {
       const editor = createEditor()
       const request = implementation.requestAiRewrite(
+        'rephrase',
         editor,
-        createMappableRange(editor, 5, 16),
+        { from: 5, to: 16 },
       )
       const transaction = editor.state.tr.insertText('careful ', 1)
 
@@ -74,11 +72,11 @@ describe.each([
     })
 
     it('inserts the AI rewrite into the mapped range after intervening edits', async () => {
-      vi.useFakeTimers()
       const editor = createEditor()
       const request = implementation.requestAiRewrite(
+        'rephrase',
         editor,
-        createMappableRange(editor, 5, 16),
+        { from: 5, to: 16 },
       )
 
       let transaction = editor.state.tr.insertText('careful ', 1)
@@ -101,7 +99,6 @@ describe.each([
       editor.view.dispatch(transaction)
 
       const insertion = implementation.insertAiRewrite(editor, request)
-      await vi.advanceTimersByTimeAsync(700)
       await insertion
 
       expect(editor.getText()).toBe(

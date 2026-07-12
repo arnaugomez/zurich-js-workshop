@@ -1,7 +1,8 @@
-import type { MappablePosition } from '@tiptap/core'
+import type { MappablePosition, Range } from '@tiptap/core'
 import type { Transaction } from '@tiptap/pm/state'
 import type { Editor } from '@tiptap/react'
-import { fakeAiRewrite } from '../fakeAi'
+import { requestAiRewrite as requestAiRewriteFromServer } from '../aiApi'
+import type { RewriteTask } from '../aiApi'
 
 export type MappableRewriteRange = {
   from: MappablePosition
@@ -14,18 +15,22 @@ export type RewriteRequest = {
 }
 
 export function requestAiRewrite(
+  task: RewriteTask,
   editor: Editor,
-  range: MappableRewriteRange,
+  range: Range,
 ): RewriteRequest {
   const selectedText = editor.state.doc.textBetween(
-    range.from.position,
-    range.to.position,
+    range.from,
+    range.to,
     ' ',
   )
 
   return {
-    text: fakeAiRewrite(selectedText),
-    range,
+    text: requestAiRewriteFromServer(task, selectedText),
+    range: {
+      from: editor.utils.createMappablePosition(range.from),
+      to: editor.utils.createMappablePosition(range.to),
+    },
   }
 }
 

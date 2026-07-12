@@ -1,26 +1,37 @@
 # AI rewrite with mappable positions
 
-This exercise is about keeping a selected Tiptap range valid while async work is running.
+This workshop keeps a selected Tiptap range valid while an async AI request is running. The browser app stores mappable positions, sends the selected text and a selected task to the Node.js server, and replaces the corresponding current range when the response arrives.
 
-The app has a Tiptap editor, a Bubble Menu, and a fake AI endpoint. Select text and click **Rewrite with AI** to request a rewrite. While the fake endpoint is waiting, the document may still change, so the original selection positions need to be mapped through later transactions before inserting the AI result.
+## Projects
 
-Implement the three functions in `src/exercise/aiRewrite.ts`:
+- `apps/web`: Vite and React editor.
+- `apps/server`: Node.js API that calls OpenAI Responses with `gpt-5.4-nano`.
 
-- `requestAiRewrite`: extract text from a range, create a pair of mappable positions, call the fake AI endpoint, and return both.
-- `updateRewriteRange`: map the stored positions through a transaction.
-- `insertAiRewrite`: resolve the mapped positions into the current equivalent range and replace that range with the AI result.
-
-Run the exercise:
+Run both projects from this directory:
 
 ```sh
 pnpm install
 pnpm dev
 ```
 
-Run the tests:
+The editor is available at `http://localhost:5173`. The Vite development server proxies `/api` to the API at `http://localhost:3001`.
+
+Set `OPENAI_API_KEY` before starting the server. For a workshop run without an API key, start both projects with:
+
+```sh
+MOCK_RESPONSE=true pnpm dev
+```
+
+The mock API always returns `MOCK RESPONSE`.
+
+## Exercises
+
+Implement the client-side mappable-range helpers in [apps/web/src/exercise/aiRewrite.ts](apps/web/src/exercise/aiRewrite.ts). `requestAiRewrite` now receives the chosen task, editor, and range, and passes the task and selected text to the API.
+
+Implement the prompt builder in [apps/server/src/exercise/buildRewritePrompt.ts](apps/server/src/exercise/buildRewritePrompt.ts). The complete references live alongside them in their respective `solution` directories.
+
+Run all tests:
 
 ```sh
 pnpm test
 ```
-
-The app imports the complete reference implementation from `src/solution/aiRewrite.solution.ts`. The tests run against both the exercise and solution implementations.
