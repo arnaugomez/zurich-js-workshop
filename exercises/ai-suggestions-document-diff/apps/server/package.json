@@ -1,5 +1,5 @@
 {
-  "name": "@ai-rewrite/server",
+  "name": "@ai-suggestions-document-diff/server",
   "version": "1.0.0",
   "private": true,
   "type": "module",
