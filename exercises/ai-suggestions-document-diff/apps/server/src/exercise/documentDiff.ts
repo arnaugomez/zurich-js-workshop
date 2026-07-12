@@ -16,8 +16,8 @@ export function diffNodes(
   after: DocumentNode[],
 ): DiffChange[] {
   // TODO: Implement the Myers diff algorithm at node (normally paragraph)
-  // granularity. Unchanged nodes are omitted. Return every edit as either
-  // `{ type: 'delete', node }` or `{ type: 'add', node }`.
+  // granularity. Unchanged nodes are omitted. Return every edit with its
+  // `beforeIndex` and `afterIndex` cursor positions.
   throw new Error('Not implemented')
 }
 

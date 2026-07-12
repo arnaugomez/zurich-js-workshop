@@ -7,8 +7,18 @@ export type DocumentNode = {
 }
 
 export type DiffChange =
-  | { type: 'delete'; node: DocumentNode }
-  | { type: 'add'; node: DocumentNode }
+  | {
+      type: 'delete'
+      node: DocumentNode
+      beforeIndex: number
+      afterIndex: number
+    }
+  | {
+      type: 'add'
+      node: DocumentNode
+      beforeIndex: number
+      afterIndex: number
+    }
 
 export type JoinedChange = {
   deleted: DocumentNode[]

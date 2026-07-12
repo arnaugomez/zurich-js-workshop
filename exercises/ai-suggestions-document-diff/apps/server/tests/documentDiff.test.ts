@@ -33,8 +33,8 @@ describe.each([
     const three = paragraph('Three')
 
     expect(implementation.diffNodes([one, oldTwo, three], [one, newTwo, three])).toEqual([
-      { type: 'delete', node: oldTwo },
-      { type: 'add', node: newTwo },
+      { type: 'delete', node: oldTwo, beforeIndex: 1, afterIndex: 1 },
+      { type: 'add', node: newTwo, beforeIndex: 2, afterIndex: 1 },
     ])
   })
 
@@ -43,8 +43,8 @@ describe.each([
     const one = paragraph('One')
     const two = paragraph('Two')
     expect(implementation.diffNodes([one, two], [zero, one])).toEqual([
-      { type: 'add', node: zero },
-      { type: 'delete', node: two },
+      { type: 'add', node: zero, beforeIndex: 0, afterIndex: 0 },
+      { type: 'delete', node: two, beforeIndex: 1, afterIndex: 2 },
     ])
   })
 
@@ -53,9 +53,27 @@ describe.each([
     const oldTwo = paragraph('Old two')
     const newOne = paragraph('New one')
     expect(implementation.joinAdjacentChanges([
-      { type: 'delete', node: oldOne },
-      { type: 'delete', node: oldTwo },
-      { type: 'add', node: newOne },
+      { type: 'delete', node: oldOne, beforeIndex: 0, afterIndex: 0 },
+      { type: 'delete', node: oldTwo, beforeIndex: 1, afterIndex: 0 },
+      { type: 'add', node: newOne, beforeIndex: 2, afterIndex: 0 },
     ])).toEqual([{ deleted: [oldOne, oldTwo], added: [newOne] }])
+  })
+
+  it('does not join edit runs separated by an equal node', () => {
+    const oldOne = paragraph('Old one')
+    const newOne = paragraph('New one')
+    const unchanged = paragraph('Unchanged')
+    const oldThree = paragraph('Old three')
+    const newThree = paragraph('New three')
+
+    const changes = implementation.diffNodes(
+      [oldOne, unchanged, oldThree],
+      [newOne, unchanged, newThree],
+    )
+
+    expect(implementation.joinAdjacentChanges(changes)).toEqual([
+      { deleted: [oldOne], added: [newOne] },
+      { deleted: [oldThree], added: [newThree] },
+    ])
   })
 })
