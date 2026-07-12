@@ -1,3 +1,4 @@
+import { isDeepStrictEqual } from 'node:util'
 import type { DiffChange, DocumentNode, JoinedChange } from '../types.js'
 
 export function getDocumentNodes(document: DocumentNode): DocumentNode[] {
@@ -6,23 +7,8 @@ export function getDocumentNodes(document: DocumentNode): DocumentNode[] {
   return document.content ?? []
 }
 
-function stableValue(value: unknown): unknown {
-  // JSON object key order is not semantically meaningful. Sorting keys gives
-  // us a canonical value while retaining array order, which *is* meaningful
-  // for document content and marks.
-  if (Array.isArray(value)) return value.map(stableValue)
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(
-      Object.entries(value as Record<string, unknown>)
-        .sort(([left], [right]) => left.localeCompare(right))
-        .map(([key, nested]) => [key, stableValue(nested)]),
-    )
-  }
-  return value
-}
-
 export function nodesEqual(left: DocumentNode, right: DocumentNode): boolean {
-  return JSON.stringify(stableValue(left)) === JSON.stringify(stableValue(right))
+  return isDeepStrictEqual(left, right)
 }
 
 type Point = { x: number; y: number }
