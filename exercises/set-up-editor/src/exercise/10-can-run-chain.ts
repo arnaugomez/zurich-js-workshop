@@ -1,6 +1,9 @@
-import type { Content, Editor } from '@tiptap/core'
+import { Editor } from '@tiptap/core'
+import StarterKit from '@tiptap/starter-kit'
 
-export function canReplaceDocument(editor: Editor, content: Content): boolean {
-  // TODO: Use .can().chain() to check the complete replacement chain.
+export const editor = new Editor({ extensions: [StarterKit] })
+
+export function toggleBlockquote(): boolean {
+  // TODO: Toggle a blockquote with the Blockquote extension.
   throw new Error('Not implemented')
 }

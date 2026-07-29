@@ -1,5 +1,8 @@
-import type { Content, Editor } from '@tiptap/core'
+import { Editor } from '@tiptap/core'
+import StarterKit from '@tiptap/starter-kit'
 
-export function canReplaceDocument(editor: Editor, content: Content): boolean {
-  return editor.can().chain().focus().clearContent().insertContent(content).run()
+export const editor = new Editor({ extensions: [StarterKit] })
+
+export function toggleBlockquote(): boolean {
+  return editor.commands.toggleBlockquote()
 }

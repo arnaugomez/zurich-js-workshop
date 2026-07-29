@@ -1,8 +1,8 @@
-import type { Content, Editor } from '@tiptap/core'
+import { Editor } from '@tiptap/core'
+import StarterKit from '@tiptap/starter-kit'
 
-export function replaceDocumentWithChain(
-  editor: Editor,
-  content: Content,
-): boolean {
-  return editor.chain().focus().clearContent().insertContent(content).run()
+export const editor = new Editor({ extensions: [StarterKit] })
+
+export function toggleHeading(): boolean {
+  return editor.commands.toggleHeading({ level: 2 })
 }

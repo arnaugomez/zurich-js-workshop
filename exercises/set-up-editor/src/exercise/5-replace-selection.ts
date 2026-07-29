@@ -1,6 +1,9 @@
-import type { Editor } from '@tiptap/core'
+import { Editor } from '@tiptap/core'
+import StarterKit from '@tiptap/starter-kit'
 
-export function replaceSelection(editor: Editor, text: string): boolean {
-  // TODO: Replace the current selection with text.
+export const editor = new Editor({ extensions: [StarterKit] })
+
+export function toggleBold(): boolean {
+  // TODO: Toggle bold formatting with the Bold extension.
   throw new Error('Not implemented')
 }

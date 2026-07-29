@@ -1,6 +1,9 @@
-import type { Content, Editor } from '@tiptap/core'
+import { Editor } from '@tiptap/core'
+import StarterKit from '@tiptap/starter-kit'
 
-export function canInsertEditorContent(editor: Editor, content: Content): boolean {
-  // TODO: Check whether insertContent can run without changing the editor.
+export const editor = new Editor({ extensions: [StarterKit] })
+
+export function canToggleBulletList(): boolean {
+  // TODO: Check whether the BulletList extension can toggle a bullet list.
   throw new Error('Not implemented')
 }

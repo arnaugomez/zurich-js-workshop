@@ -1,5 +1,8 @@
-import type { Editor } from '@tiptap/core'
+import { Editor } from '@tiptap/core'
+import StarterKit from '@tiptap/starter-kit'
 
-export function replaceSelection(editor: Editor, text: string): boolean {
-  return editor.commands.insertContent(text)
+export const editor = new Editor({ extensions: [StarterKit] })
+
+export function toggleBold(): boolean {
+  return editor.commands.toggleBold()
 }

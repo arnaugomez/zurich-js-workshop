@@ -1,5 +1,8 @@
-import type { Editor } from '@tiptap/core'
+import { Editor } from '@tiptap/core'
+import StarterKit from '@tiptap/starter-kit'
 
-export function clearEditorContent(editor: Editor): boolean {
-  return editor.commands.clearContent()
+export const editor = new Editor({ extensions: [StarterKit] })
+
+export function toggleItalic(): boolean {
+  return editor.commands.toggleItalic()
 }
