@@ -1,6 +1,6 @@
 import { Editor } from '@tiptap/core'
 import { afterEach, describe, expect, it } from 'vitest'
-import { createChatbotEditor } from '../src/chatbot-editor'
+import { createChatbotEditor } from '../src/exercise/1-chatbot-editor'
 
 let editor: Editor | undefined
 

@@ -1,6 +1,6 @@
 import { Editor } from '@tiptap/core'
 import { afterEach, describe, expect, it } from 'vitest'
-import { createDocumentEditor } from '../src/document-editor'
+import { createDocumentEditor } from '../src/exercise/2-document-editor'
 
 let editor: Editor | undefined
 
