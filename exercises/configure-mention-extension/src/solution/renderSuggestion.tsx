@@ -2,7 +2,7 @@ import { computePosition, flip, shift } from '@floating-ui/dom'
 import { posToDOMRect, ReactRenderer } from '@tiptap/react'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
 import type { ClassroomNote } from '../data/classroom-notes'
-import { NoteMentionList, type NoteMentionListRef } from '../mention/NoteMentionList'
+import { NoteMentionList, type NoteMentionListRef } from './NoteMentionList'
 
 type MentionSuggestion = Omit<SuggestionOptions<ClassroomNote>, 'editor'>
 
