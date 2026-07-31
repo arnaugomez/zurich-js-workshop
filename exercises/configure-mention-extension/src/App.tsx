@@ -16,8 +16,7 @@ export function App() {
     <main className="app-shell">
       <section className="workspace">
         <header>
-          <p className="eyebrow">Tiptap Mention exercise</p>
-          <h1>Ground a report draft in classroom notes</h1>
+          <h1>Provide AI context with the Tiptap Mention extension</h1>
         </header>
         <EditorContent editor={editor} className="editor-frame" />
       </section>
