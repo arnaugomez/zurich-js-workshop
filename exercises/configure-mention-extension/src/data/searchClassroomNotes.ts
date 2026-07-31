@@ -1,4 +1,4 @@
-import { classroomNotes, type ClassroomNote } from './classroom-notes'
+import { classroomNotes, type ClassroomNote } from "./classroom-notes";
 
 const searchableText = (note: ClassroomNote) =>
   [
@@ -9,19 +9,27 @@ const searchableText = (note: ClassroomNote) =>
     note.supportLevel,
     note.summary,
   ]
-    .join(' ')
-    .toLowerCase()
+    .join(" ")
+    .toLowerCase();
 
-export async function searchClassroomNotes(query: string): Promise<ClassroomNote[]> {
-  const normalizedQuery = query.trim().toLowerCase()
+/**
+ * Mock function that returns classroom notes
+ *
+ * @param query The user-generated query
+ * @returns The results that match the query
+ */
+export async function searchClassroomNotes(
+  query: string,
+): Promise<ClassroomNote[]> {
+  const normalizedQuery = query.trim().toLowerCase();
 
-  await new Promise(resolve => setTimeout(resolve, 40))
+  await new Promise((resolve) => setTimeout(resolve, 40));
 
   if (!normalizedQuery) {
-    return classroomNotes.slice(0, 5)
+    return classroomNotes.slice(0, 5);
   }
 
   return classroomNotes
-    .filter(note => searchableText(note).includes(normalizedQuery))
-    .slice(0, 5)
+    .filter((note) => searchableText(note).includes(normalizedQuery))
+    .slice(0, 5);
 }

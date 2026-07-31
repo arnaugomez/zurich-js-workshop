@@ -1,60 +1,18 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import type { ClassroomNote } from "../data/classroom-notes";
+import type { ClassroomNote } from '../data/classroom-notes'
 
 type NoteMentionListProps = {
-  items: ClassroomNote[];
-  command: (note: ClassroomNote) => void;
-};
+  items: ClassroomNote[]
+  selectedIndex: number
+  onSelect: (index: number) => void
+}
 
-export type NoteMentionListRef = {
-  onKeyDown: (props: { event: KeyboardEvent }) => boolean;
-};
-
-export const NoteMentionList = forwardRef<
-  NoteMentionListRef,
-  NoteMentionListProps
->(function ({ items, command }, ref) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [items]);
-
-  const selectItem = (index: number) => {
-    const item = items[index];
-
-    if (item) {
-      command(item);
-    }
-  };
-
-  useImperativeHandle(ref, () => ({
-    onKeyDown({ event }) {
-      if (items.length === 0) {
-        return false;
-      }
-
-      if (event.key === "ArrowUp") {
-        setSelectedIndex((selectedIndex + items.length - 1) % items.length);
-        return true;
-      }
-
-      if (event.key === "ArrowDown") {
-        setSelectedIndex((selectedIndex + 1) % items.length);
-        return true;
-      }
-
-      if (event.key === "Enter") {
-        selectItem(selectedIndex);
-        return true;
-      }
-
-      return false;
-    },
-  }));
-
+export function NoteMentionList({
+  items,
+  selectedIndex,
+  onSelect,
+}: NoteMentionListProps) {
   if (items.length === 0) {
-    return <div className="suggestion-empty">No matching notes</div>;
+    return <div className="suggestion-empty">No matching notes</div>
   }
 
   return (
@@ -67,8 +25,8 @@ export const NoteMentionList = forwardRef<
           }`}
           key={note.id}
           onMouseDown={(event) => {
-            event.preventDefault();
-            selectItem(index);
+            event.preventDefault()
+            onSelect(index)
           }}
         >
           <strong>{note.student}</strong>
@@ -76,5 +34,5 @@ export const NoteMentionList = forwardRef<
         </button>
       ))}
     </div>
-  );
-});
+  )
+}
