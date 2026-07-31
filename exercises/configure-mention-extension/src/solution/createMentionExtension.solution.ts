@@ -5,6 +5,7 @@ import type { ClassroomNote } from "../data/classroom-notes";
 import { searchClassroomNotes } from "../data/searchClassroomNotes";
 import { NoteMentionList } from "./NoteMentionList";
 import { updatePosition } from "./updatePosition";
+import { filterClassroomNotes } from "../data/filter-classroom-notes";
 
 export function createMentionExtension() {
   return Mention.configure({
@@ -56,6 +57,13 @@ export function createMentionExtension() {
             updatePosition(component, props);
           },
           onUpdate(props) {
+            // If it's loading, filter the existing notes locally
+            if (props.loading && suggestionProps) {
+              props.items = filterClassroomNotes(
+                suggestionProps.items,
+                props.query,
+              );
+            }
             suggestionProps = props;
             selectedIndex = 0;
             rerenderComponent();

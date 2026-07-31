@@ -1,16 +1,7 @@
 import { classroomNotes, type ClassroomNote } from "./classroom-notes";
+import { filterClassroomNotes } from "./filter-classroom-notes";
 
-const searchableText = (note: ClassroomNote) =>
-  [
-    note.student,
-    note.name,
-    note.activity,
-    note.skillArea,
-    note.supportLevel,
-    note.summary,
-  ]
-    .join(" ")
-    .toLowerCase();
+export { searchableText } from "./filter-classroom-notes";
 
 /**
  * Mock function that returns classroom notes
@@ -21,15 +12,7 @@ const searchableText = (note: ClassroomNote) =>
 export async function searchClassroomNotes(
   query: string,
 ): Promise<ClassroomNote[]> {
-  const normalizedQuery = query.trim().toLowerCase();
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
-  await new Promise((resolve) => setTimeout(resolve, 40));
-
-  if (!normalizedQuery) {
-    return classroomNotes.slice(0, 5);
-  }
-
-  return classroomNotes
-    .filter((note) => searchableText(note).includes(normalizedQuery))
-    .slice(0, 5);
+  return filterClassroomNotes(classroomNotes, query);
 }

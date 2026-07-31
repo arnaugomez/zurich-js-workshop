@@ -5,6 +5,7 @@ import type { ClassroomNote } from "../data/classroom-notes";
 import { searchClassroomNotes } from "../data/searchClassroomNotes";
 import { NoteMentionList } from "./NoteMentionList";
 import { updatePosition } from "./updatePosition";
+import { filterClassroomNotes } from "../data/filter-classroom-notes";
 
 export function createMentionExtension(): ReturnType<typeof Mention.configure> {
   return Mention.configure({
@@ -40,8 +41,8 @@ export function createMentionExtension(): ReturnType<typeof Mention.configure> {
             return;
           }
 
-          const props = {
-            // TODO: Pass the props tat the NoteMentionList component needs
+          const componentProps = {
+            // TODO: Pass the props that the NoteMentionList component needs
             // - The items
             // - The index of the selected item
             // - The `onSelect` callback that responds to the user selecting an item
@@ -49,15 +50,22 @@ export function createMentionExtension(): ReturnType<typeof Mention.configure> {
           };
 
           // Re-render the component by updating its props.
-          component?.updateProps(props);
+          component?.updateProps(componentProps);
         };
 
         return {
           onStart(props) {
             suggestionProps = props;
             selectedIndex = 0;
+            const componentProps = {
+              // TODO: Pass the initial props that the NoteMentionList component needs
+              // - The items (get them from suggestionProps)
+              // - The index of the selected item
+              // - The `onSelect` callback that responds to the user selecting an item
+              // Tip: see the NoteMentionList component for a full list of the props it needs.
+            };
             component = new ReactRenderer(NoteMentionList, {
-              props,
+              props: componentProps,
               editor: props.editor,
             });
             rerenderComponent();
@@ -66,6 +74,13 @@ export function createMentionExtension(): ReturnType<typeof Mention.configure> {
             // position it next to the active suggestion range.
           },
           onUpdate(props) {
+            // If it's loading, filter the existing notes locally
+            if (props.loading && suggestionProps) {
+              props.items = filterClassroomNotes(
+                suggestionProps.items,
+                props.query,
+              );
+            }
             suggestionProps = props;
             selectedIndex = 0;
             rerenderComponent();
