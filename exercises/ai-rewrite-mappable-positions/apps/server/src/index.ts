@@ -3,6 +3,7 @@ import { cors } from '@elysiajs/cors'
 import { Elysia, t } from 'elysia'
 import OpenAI from 'openai'
 import { buildRewritePrompt } from './solution/buildRewritePrompt.solution.js'
+import { preserveTrailingPunctuation } from './solution/preserveTrailingPunctuation.solution.js'
 
 const port = Number(process.env.PORT ?? 3001)
 const useMockResponse = process.env.MOCK_RESPONSE === 'true'
@@ -25,7 +26,9 @@ const app = new Elysia({ adapter: node() })
     async ({ body, set }) => {
       if (useMockResponse) {
         await new Promise(resolve => setTimeout(resolve, 1_000))
-        return { text: 'MOCK RESPONSE' }
+        return {
+          text: preserveTrailingPunctuation(body.text, 'MOCK RESPONSE'),
+        }
       }
 
       try {
@@ -33,7 +36,9 @@ const app = new Elysia({ adapter: node() })
           model: 'gpt-5.4-nano',
           input: buildRewritePrompt(body.task, body.text),
         })
-        return { text: result.output_text }
+        return {
+          text: preserveTrailingPunctuation(body.text, result.output_text),
+        }
       } catch (error) {
         console.error(error)
         set.status = 500
