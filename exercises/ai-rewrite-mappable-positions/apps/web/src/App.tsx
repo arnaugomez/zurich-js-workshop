@@ -1,5 +1,5 @@
 import type { Editor } from '@tiptap/react'
-import { EditorContent, useEditor } from '@tiptap/react'
+import { EditorContent, useEditor, useEditorState } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react/menus'
 import { Selection } from '@tiptap/extensions'
 import StarterKit from '@tiptap/starter-kit'
@@ -179,20 +179,41 @@ function ToolbarButton({
 }
 
 function EditorToolbar({ editor }: { editor: Editor }) {
+  const toolbarState = useEditorState({
+    editor,
+    selector: ({ editor: currentEditor }) => ({
+      canRedo: currentEditor.can().redo(),
+      canUndo: currentEditor.can().undo(),
+      isBold: currentEditor.isActive('bold'),
+      isBulletList: currentEditor.isActive('bulletList'),
+      isCode: currentEditor.isActive('code'),
+      isCodeBlock: currentEditor.isActive('codeBlock'),
+      heading: {
+        1: currentEditor.isActive('heading', { level: 1 }),
+        2: currentEditor.isActive('heading', { level: 2 }),
+        3: currentEditor.isActive('heading', { level: 3 }),
+      },
+      isItalic: currentEditor.isActive('italic'),
+      isOrderedList: currentEditor.isActive('orderedList'),
+      isParagraph: currentEditor.isActive('paragraph'),
+      isQuote: currentEditor.isActive('blockquote'),
+      isStrike: currentEditor.isActive('strike'),
+    }),
+  })
   const run = () => editor.chain().focus()
 
   return (
     <nav className="editor-toolbar" aria-label="Text formatting">
       <div className="toolbar-group">
         <ToolbarButton
-          active={editor.isActive('paragraph')}
+          active={toolbarState.isParagraph}
           onClick={() => run().setParagraph().run()}
         >
           Paragraph
         </ToolbarButton>
-        {[1, 2, 3].map(level => (
+        {([1, 2, 3] as const).map(level => (
           <ToolbarButton
-            active={editor.isActive('heading', { level })}
+            active={toolbarState.heading[level]}
             key={level}
             label={`Heading ${level}`}
             onClick={() => run().toggleHeading({ level: level as 1 | 2 | 3 }).run()}
@@ -205,16 +226,16 @@ function EditorToolbar({ editor }: { editor: Editor }) {
       <div className="toolbar-divider" aria-hidden="true" />
 
       <div className="toolbar-group">
-        <ToolbarButton active={editor.isActive('bold')} onClick={() => run().toggleBold().run()}>
+        <ToolbarButton active={toolbarState.isBold} onClick={() => run().toggleBold().run()}>
           Bold
         </ToolbarButton>
-        <ToolbarButton active={editor.isActive('italic')} onClick={() => run().toggleItalic().run()}>
+        <ToolbarButton active={toolbarState.isItalic} onClick={() => run().toggleItalic().run()}>
           Italic
         </ToolbarButton>
-        <ToolbarButton active={editor.isActive('strike')} onClick={() => run().toggleStrike().run()}>
+        <ToolbarButton active={toolbarState.isStrike} onClick={() => run().toggleStrike().run()}>
           Strike
         </ToolbarButton>
-        <ToolbarButton active={editor.isActive('code')} onClick={() => run().toggleCode().run()}>
+        <ToolbarButton active={toolbarState.isCode} onClick={() => run().toggleCode().run()}>
           Code
         </ToolbarButton>
       </div>
@@ -222,16 +243,16 @@ function EditorToolbar({ editor }: { editor: Editor }) {
       <div className="toolbar-divider" aria-hidden="true" />
 
       <div className="toolbar-group">
-        <ToolbarButton active={editor.isActive('bulletList')} onClick={() => run().toggleBulletList().run()}>
+        <ToolbarButton active={toolbarState.isBulletList} onClick={() => run().toggleBulletList().run()}>
           Bullets
         </ToolbarButton>
-        <ToolbarButton active={editor.isActive('orderedList')} onClick={() => run().toggleOrderedList().run()}>
+        <ToolbarButton active={toolbarState.isOrderedList} onClick={() => run().toggleOrderedList().run()}>
           Numbered
         </ToolbarButton>
-        <ToolbarButton active={editor.isActive('blockquote')} onClick={() => run().toggleBlockquote().run()}>
+        <ToolbarButton active={toolbarState.isQuote} onClick={() => run().toggleBlockquote().run()}>
           Quote
         </ToolbarButton>
-        <ToolbarButton active={editor.isActive('codeBlock')} onClick={() => run().toggleCodeBlock().run()}>
+        <ToolbarButton active={toolbarState.isCodeBlock} onClick={() => run().toggleCodeBlock().run()}>
           Code block
         </ToolbarButton>
         <ToolbarButton onClick={() => run().setHorizontalRule().run()}>
@@ -242,10 +263,10 @@ function EditorToolbar({ editor }: { editor: Editor }) {
       <div className="toolbar-divider" aria-hidden="true" />
 
       <div className="toolbar-group">
-        <ToolbarButton disabled={!editor.can().undo()} onClick={() => run().undo().run()}>
+        <ToolbarButton disabled={!toolbarState.canUndo} onClick={() => run().undo().run()}>
           Undo
         </ToolbarButton>
-        <ToolbarButton disabled={!editor.can().redo()} onClick={() => run().redo().run()}>
+        <ToolbarButton disabled={!toolbarState.canRedo} onClick={() => run().redo().run()}>
           Redo
         </ToolbarButton>
       </div>
