@@ -6,11 +6,7 @@ import {
   buildInitialSuggestionsPrompt,
   buildSuggestionsPrompt,
 } from "./solution/buildSuggestionsPrompt.solution.js";
-import {
-  diffNodes,
-  getDocumentNodes,
-  joinAdjacentChanges,
-} from "./solution/documentDiff.solution.js";
+import { documentDiff } from "./solution/documentDiff.solution.js";
 import type { DocumentNode } from "./types.js";
 
 const port = Number(process.env.PORT ?? 3001);
@@ -43,12 +39,7 @@ const app = new Elysia({ adapter: node() })
     async ({ body, set }) => {
       const currentDocument = body.document as DocumentNode;
       const previousDocument = body.previousDocument as DocumentNode;
-      const changes = joinAdjacentChanges(
-        diffNodes(
-          getDocumentNodes(previousDocument),
-          getDocumentNodes(currentDocument),
-        ),
-      );
+      const changes = documentDiff(previousDocument, currentDocument);
       if (useMockResponse) {
         await new Promise((resolve) => setTimeout(resolve, 800));
         return {

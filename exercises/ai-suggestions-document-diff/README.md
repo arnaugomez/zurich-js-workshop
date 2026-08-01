@@ -16,7 +16,7 @@ Open `http://localhost:5173`. The API runs at `http://localhost:3001`; Vite prox
 ## Exercises
 
 1. Implement `apps/web/src/exercise/getEditorDocument.ts` to extract Tiptap JSON.
-2. Implement the four helpers in `apps/server/src/exercise/documentDiff.ts`: direct-child extraction, deep node comparison, Myers diff, and adjacent-change joining.
+2. Complete the small slots in `apps/server/src/exercise/documentDiff.ts` to compare documents with a paragraph-level Myers diff.
 3. Implement `apps/server/src/exercise/buildSuggestionsPrompt.ts`.
 
 Completed references are in each app's `src/solution` directory. The runnable demo imports the solutions so it works before workshop participants complete the exercises.
