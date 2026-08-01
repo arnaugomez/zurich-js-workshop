@@ -8,7 +8,7 @@ import { updatePosition } from "./updatePosition";
 import { filterClassroomNotes } from "../data/filter-classroom-notes";
 
 export function createMentionExtension(): ReturnType<typeof Mention.configure> {
-  return Mention.configure({
+  return Mention.conjfigure({
     // TODO: Add the "note-mention" CSS class used to style inserted note mentions.
     HTMLAttributes: {},
     suggestion: {

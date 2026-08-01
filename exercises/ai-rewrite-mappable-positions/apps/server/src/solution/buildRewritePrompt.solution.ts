@@ -10,8 +10,15 @@ const taskInstructions: Record<RewriteTask, string> = {
 
 export function buildRewritePrompt(task: RewriteTask, text: string): string {
   const taskInstruction = taskInstructions[task];
-  return `You are a precise text editor. Re-write the provided text to accomplish the task.
+  return `You are a precise text editor. Re-write the provided text (inside the "<text>" tags) to accomplish the task.
 <text>${text}</text>
 <task>${taskInstruction}</task>
-Your response should be the re-written text. Your response should not contain any "<text>" or "<task>" tags and it shoud not contain HTML tags. Your response should not include any additional commentary apart from the re-written text. Your response should only be the re-written text`;
+<response-format>
+Your response should be the re-written text.
+Your response should be in plain text, not HTML or Markdown.
+Your response should not contain any "<text>" or "<task>" tags and it shoud not contain HTML tags.
+Your response should not include any additional commentary apart from the re-written text.
+Your response should only be the re-written text.
+</response-format>
+`;
 }

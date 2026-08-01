@@ -1,11 +1,4 @@
-export const rewriteTasks = [
-  'summarize',
-  'expand',
-  'rephrase',
-  'proofread',
-] as const
-
-export type RewriteTask = (typeof rewriteTasks)[number]
+export type RewriteTask = 'summarize' | 'expand' | 'rephrase' | 'proofread'
 
 export function buildRewritePrompt(task: RewriteTask, text: string): string {
   // TODO: Return a prompt that tells the model to perform `task` on `text`.
