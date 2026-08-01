@@ -20,3 +20,5 @@ Features:
 - Improvement suggestions, same UI and functionality as the /Users/arnaugomez/dev2/zurich-js-workshop/exercises/ai-suggestions-document-diff demo. Model is gpt-5.4-nano
 - You can copy the .env variables file from /Users/arnaugomez/work/projects/ai-toolkit-demos file but do not read the .env files, never
 - Do not add a title to the app yet. The app is just the editor, the right sidebar, and the top menu.
+
+Build the app in /Users/arnaugomez/dev2/zurich-js-workshop/exercises/agentic-editor-app, this should be the root folder of the app, inside it there should be its own package.json.
