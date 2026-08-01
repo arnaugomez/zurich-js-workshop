@@ -21,15 +21,37 @@ function getOpenAiClient(): OpenAI {
   return openai;
 }
 
+const suggestionsFormat = {
+  type: "json_schema",
+  name: "suggestions",
+  strict: true,
+  schema: {
+    type: "object",
+    properties: {
+      suggestions: {
+        type: "array",
+        items: { type: "string" },
+        minItems: 3,
+        maxItems: 3,
+      },
+    },
+    required: ["suggestions"],
+    additionalProperties: false,
+  },
+} as const;
+
 function parseSuggestions(text: string): string[] {
   const value: unknown = JSON.parse(text);
   if (
-    !Array.isArray(value) ||
-    !value.every((item) => typeof item === "string")
+    typeof value !== "object" ||
+    value === null ||
+    !("suggestions" in value) ||
+    !Array.isArray(value.suggestions) ||
+    !value.suggestions.every((item) => typeof item === "string")
   ) {
-    throw new Error("The model did not return an array of suggestions.");
+    throw new Error("The model did not return structured suggestions.");
   }
-  return value.slice(0, 5);
+  return value.suggestions;
 }
 
 const app = new Elysia({ adapter: node() })
@@ -54,6 +76,7 @@ const app = new Elysia({ adapter: node() })
             changes.length === 0
               ? buildInitialSuggestionsPrompt(currentDocument)
               : buildSuggestionsPrompt(currentDocument, changes),
+          text: { format: suggestionsFormat },
         });
         return { suggestions: parseSuggestions(result.output_text) };
       } catch (error) {

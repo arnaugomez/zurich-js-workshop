@@ -2,7 +2,7 @@
 
 This workshop demo helps a special-needs education teacher improve an end-of-course student report. A Tiptap editor sends its previous and current structured JSON to the server two seconds after editing stops. The server compares top-level blocks with a paragraph-granularity Myers diff and asks AI for short, evidence-grounded questions.
 
-The initial request has no changes, so AI receives the complete current document with an initial-review prompt. Once the teacher edits, AI receives the current document and a compact list of recent changes; it never receives full before-and-after copies of the report.
+The initial request has no changes, so AI receives the complete current document with an initial-review prompt. Once the teacher edits, AI receives the current document and a compact list of recent changes; it never receives full before-and-after copies of the report. The server uses OpenAI Structured Outputs to return a validated `suggestions` array.
 
 ## Run the demo
 

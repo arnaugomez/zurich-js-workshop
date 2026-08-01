@@ -6,13 +6,13 @@ export function buildSuggestionsPrompt(
 ): string {
   // TODO: Build a prompt asking for short, constructive questions that help a
   // special-needs teacher improve an end-of-course report. Include the current
-  // document and the compact changes, and require a JSON array of strings.
+  // document and compact changes, and ask for 3 to 5 respectful questions.
   throw new Error('Not implemented')
 }
 
 export function buildInitialSuggestionsPrompt(document: DocumentNode): string {
   // TODO: Build a prompt for the initial review, when no paragraph-level
   // changes exist yet. Include the entire current document and require the
-  // same short, respectful JSON-question response as the change prompt.
+  // same short, respectful question response as the change prompt.
   throw new Error('Not implemented')
 }
