@@ -14,9 +14,24 @@ import {
   supportingDocuments,
 } from "@/data/supporting-documents";
 import { getDocumentName, isDocumentSlug } from "@/lib/document-id";
+import { getIp, rateLimit } from "@/lib/rate-limit";
 import { executeToolkitTool, getToolkitTools } from "@/lib/server-ai-toolkit/tools";
 
 export async function POST(request: Request) {
+  if (process.env.UPSTASH_REDIS_REST_URL) {
+    const ip = await getIp();
+    const isAllowed = await rateLimit(ip);
+
+    if (!isAllowed) {
+      return new Response("Rate limit exceeded. Please try again later.", {
+        status: 429,
+        headers: {
+          "Content-Type": "text/plain",
+        },
+      });
+    }
+  }
+
   const body = (await request.json()) as {
     messages?: UIMessage[];
     editorContext?: unknown;
