@@ -10,13 +10,7 @@ test("opens the editor and all five sidebar panels", async ({ page }) => {
   await expect(page.getByRole("navigation", { name: "Document formatting" })).toBeVisible();
   await expect(page.getByRole("textbox", { name: "Student progress report editor" })).toBeVisible();
 
-  for (const tab of [
-    "Chat",
-    "Tracked changes",
-    "Comments",
-    "Suggestions",
-    "Supporting documents",
-  ]) {
+  for (const tab of ["Chat", "Changes", "Comments", "Ideas", "Docs"]) {
     await page.getByRole("tab", { name: tab, exact: true }).click();
     await expect(page.getByRole("tab", { name: tab, exact: true })).toHaveAttribute(
       "aria-selected",
@@ -55,6 +49,23 @@ test("offers document mentions in the minimal chat editor", async ({ page }) => 
   const composer = page.getByRole("textbox", { name: "Ask the AI to edit the document" });
   await composer.fill("Use @marc");
   await expect(page.getByRole("option", { name: /Marc/ })).toBeVisible();
+});
+
+test("keeps the mention menu inside an 8px boundary and flips it above", async ({ page }) => {
+  await page.goto("/?document=gentle-panda");
+  const composer = page.getByRole("textbox", { name: "Ask the AI to edit the document" });
+  await composer.fill("@");
+
+  const popover = page.locator(".mention-popover");
+  await expect(popover).toHaveAttribute("data-placement", /^top/);
+  const box = await popover.boundingBox();
+  const viewport = page.viewportSize();
+  expect(box).not.toBeNull();
+  expect(viewport).not.toBeNull();
+  expect(box!.x).toBeGreaterThanOrEqual(8);
+  expect(box!.y).toBeGreaterThanOrEqual(8);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(viewport!.width - 8);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(viewport!.height - 8);
 });
 
 test("reset replaces the document slug", async ({ page }) => {

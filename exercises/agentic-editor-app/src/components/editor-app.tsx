@@ -46,10 +46,10 @@ import {
 type PanelId = "chat" | "tracked" | "comments" | "suggestions" | "documents";
 const panels: Array<{ id: PanelId; label: string }> = [
   { id: "chat", label: "Chat" },
-  { id: "tracked", label: "Tracked changes" },
+  { id: "tracked", label: "Changes" },
   { id: "comments", label: "Comments" },
-  { id: "suggestions", label: "Suggestions" },
-  { id: "documents", label: "Supporting documents" },
+  { id: "suggestions", label: "Ideas" },
+  { id: "documents", label: "Docs" },
 ];
 
 const rewriteMenuOptions = {

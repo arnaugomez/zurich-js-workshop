@@ -19,6 +19,7 @@
     "@ai-sdk/devtools": "^1.0.9",
     "@ai-sdk/openai": "^4.0.25",
     "@ai-sdk/react": "^4.0.47",
+    "@floating-ui/dom": "1.8.0",
     "@floating-ui/react": "^0.27.19",
     "@hocuspocus/provider": "3.4.4",
     "@tiptap/ai-toolkit": "0.3.0",

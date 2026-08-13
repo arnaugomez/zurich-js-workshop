@@ -1,5 +1,6 @@
 "use client";
 
+import { computePosition, flip, offset, shift } from "@floating-ui/dom";
 import Mention from "@tiptap/extension-mention";
 import { ReactRenderer } from "@tiptap/react";
 import type { SuggestionProps } from "@tiptap/suggestion";
@@ -38,8 +39,27 @@ function MentionList({ items, selectedIndex, onSelect }: MentionListProps) {
 function positionPopover(element: HTMLElement, props: SuggestionProps<SupportingDocument>) {
   const rect = props.clientRect?.();
   if (!rect) return;
-  element.style.left = `${Math.min(rect.left, window.innerWidth - 330)}px`;
-  element.style.top = `${rect.bottom + 8}px`;
+
+  const reference = {
+    getBoundingClientRect: () => rect,
+    contextElement: props.editor.view.dom,
+  };
+
+  void computePosition(reference, element, {
+    placement: "bottom-start",
+    strategy: "fixed",
+    middleware: [
+      offset(8),
+      flip({ fallbackPlacements: ["top-start"], padding: 8 }),
+      shift({ padding: 8 }),
+    ],
+  }).then(({ x, y, placement, strategy }) => {
+    if (!element.isConnected) return;
+    element.style.position = strategy;
+    element.style.left = `${x}px`;
+    element.style.top = `${y}px`;
+    element.dataset.placement = placement;
+  });
 }
 
 export function createSupportingDocumentMention() {
