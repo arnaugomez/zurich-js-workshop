@@ -69,10 +69,10 @@ export function createMentionExtension(): ReturnType<typeof Mention.configure> {
             });
             rerenderComponent();
             component.element.classList.add("suggestion-popover");
-            // TODO: Append the HTML element that renders 
+            // TODO: Append the HTML element that renders
             // the React component to the document body, then
             // position it next to the active suggestion range.
-            // Hint: use the `updatePosition` helper to position 
+            // Hint: use the `updatePosition` helper to position
             // the component.
           },
           onUpdate(props) {

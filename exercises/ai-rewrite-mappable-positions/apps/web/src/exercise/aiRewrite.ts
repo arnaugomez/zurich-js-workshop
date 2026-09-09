@@ -46,5 +46,7 @@ export async function insertAiRewrite(
   // 1. Await request.text.
   // 2. Read the latest numeric positions from request.range.
   // 3. Replace that equivalent range with the generated text.
+  // 4. In the same chain of commands that replaces the text,
+  // set the editor selection to cover the replaced text.
   throw new Error("Not implemented");
 }
