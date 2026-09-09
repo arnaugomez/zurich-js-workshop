@@ -8,13 +8,17 @@ import { updatePosition } from "./updatePosition";
 import { filterClassroomNotes } from "../data/filter-classroom-notes";
 
 export function createMentionExtension(): ReturnType<typeof Mention.configure> {
-  return Mention.conjfigure({
+  // This is the extension you plug into the Tiptap editor
+  // so that it can support mentions. For example, you'd use it like this:
+  // new Editor({extensions:[Mention.configure(...)]})
+  return Mention.configure({
     // TODO: Add the "note-mention" CSS class used to style inserted note mentions.
     HTMLAttributes: {},
     suggestion: {
       // TODO: configure the suggestion so that it opens when the user presses "@"
       char: "",
-      // TODO: use `searchClassroomNotes` to retrieve the classroom notes every time the user types in the mention
+      // TODO: use `searchClassroomNotes` to retrieve the classroom notes
+      // every time the user types in the mention
       items: async (props) => {
         return [];
       },
@@ -32,7 +36,8 @@ export function createMentionExtension(): ReturnType<typeof Mention.configure> {
           const item = currentSuggestionProps?.items[index];
 
           if (item) {
-            // TODO: Run the suggestion command (suggestionProps.command) with the selected note.
+            // TODO: Run the suggestion command (suggestionProps.command)
+            //  with the selected note.
           }
         };
 
@@ -57,21 +62,18 @@ export function createMentionExtension(): ReturnType<typeof Mention.configure> {
           onStart(props) {
             suggestionProps = props;
             selectedIndex = 0;
-            const componentProps = {
-              // TODO: Pass the initial props that the NoteMentionList component needs
-              // - The items (get them from suggestionProps)
-              // - The index of the selected item
-              // - The `onSelect` callback that responds to the user selecting an item
-              // Tip: see the NoteMentionList component for a full list of the props it needs.
-            };
+            
             component = new ReactRenderer(NoteMentionList, {
-              props: componentProps,
+              props,
               editor: props.editor,
             });
             rerenderComponent();
             component.element.classList.add("suggestion-popover");
-            // TODO: Append the popover element to the document body, then
+            // TODO: Append the HTML element that renders 
+            // the React component to the document body, then
             // position it next to the active suggestion range.
+            // Hint: use the `updatePosition` helper to position 
+            // the component.
           },
           onUpdate(props) {
             // If it's loading, filter the existing notes locally
