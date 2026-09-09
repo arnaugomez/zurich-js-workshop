@@ -13,6 +13,7 @@ export function NoteMentionList({
 }: NoteMentionListProps) {
   if (items.length === 0) {
     // TODO: Render the empty-state message for a search with no matching notes.
+    // The message must be a HTML div element with a "suggestion-empty" class.
     return null;
   }
 
@@ -21,7 +22,7 @@ export function NoteMentionList({
       {items.map((note, index) => (
         <button
           type="button"
-          // TODO: Use the suggestion item class and add the selected class
+          // TODO: Use the "suggestion-item" class and add the "is-selected" class
           // when this item's index matches `selectedIndex`.
           className=""
           // TODO: Use the note's stable, unique id as the React key.
@@ -29,7 +30,6 @@ export function NoteMentionList({
           onMouseDown={(event) => {
             event.preventDefault();
             // TODO: Select this note without letting the editor lose focus.
-            void onSelect;
           }}
         >
           {/* TODO: Render the student's name and the note's activity. */}
